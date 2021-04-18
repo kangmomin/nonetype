@@ -1,0 +1,58 @@
+const port = 3002
+const express = require("express")
+const app = express()
+const bp = require("body-parser")
+const compression = require("compression")
+const session = require('express-session')
+const FileStore = require('session-file-store')(session)
+const favicon = require('serve-favicon')
+const path = require('path')
+
+const main = require('./router/main')
+const board = require('./router/board')
+const sign_up_process = require('./router/sign_up_process')
+const login_process = require('./router/login_process')
+const logout = require('./router/logout')
+const contact = require('./router/contact')
+const contact_process = require('./router/contact_process')
+const search = require('./router/search')
+const search_process = require('./router/search_process')
+const _delete = require('./router/_delete')
+const update = require('./router/update')
+const update_process = require('./router/update_process')
+const img_upload = require('./router/img_upload')
+
+app.use(express.json())
+app.post('*', bp.urlencoded({ extended: false}))
+app.set('views', __dirname + '/public')
+app.set('view engine','ejs')
+app.use(express.static(__dirname + '/public'))
+app.use(compression())
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    store:new FileStore()
+}))
+app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
+
+app.get('/', main)
+app.get('/ID/:id', board)
+app.get('/login', (req, res) => {res.render('login/index.html')})
+app.get('/sign_up', (req, res) => {res.render('sign_up')})
+app.get('/contact', contact)
+app.get('/about', (req, res) => {res.render('blog/about.ejs')})
+app.get('/logout', logout)
+app.get('/search/:search', search)
+app.get('/search/:search/:category', search_process)
+
+app.post('/sign_up_process', sign_up_process)
+app.post('/login_process', login_process)
+app.post('/contact_process', contact_process)
+app.post('/delete', _delete)
+app.post('/update', update)
+app.post('/update_process', update_process)
+app.post('/img_upload', img_upload)
+
+app.get('*',(req, res) => { res.status(404).send("Not Found") })
+app.listen(port, () => { console.log(`it's running on port : ${port}`) })

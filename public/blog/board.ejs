@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="post">
+  <meta name="author" content="koldin">
+
+  <title>koldin-Contact</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="글" />
+  <meta property="og:description" content="게시글" />
+  <meta property="og:image" content="http://koldin.myddns.me:3002/img/og_post.jpg" />
+  <!-- Bootstrap core CSS -->
+  <link href="../blog/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="../blog/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="../blog/css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <style>
+      img{
+        max-width: 100%;
+        max-height: 100%
+      }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/">Start Bootstrap</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+          <%- nav%>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="masthead"> <!--img-->
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1><%-title%></h1>
+            <h3 class="post-subtitle">
+              <h3 style="width: 100%; word-break:break-all;"><%-tags%></h3>
+            </h3>  
+            <%-owner%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto" id="update">
+          <%- description%>
+        </div>
+      </div>
+    </div>
+  </article>
+  <hr>
+  <div id="disqus_thread" style="padding: 10px;"></div>
+  <div id="update-script">
+    <script>
+      function update() {
+        $.ajax({
+            url: "/update",
+            type: "POST",
+            data: {
+                'board': '<%=boardId%>'
+            },
+            success: (result) => {
+                if(result.result == 'err') return alert('this is not your post!')
+                if(result.result == 'location') return location.href = "/login"
+                document.getElementById('update').innerHTML = result.content
+                document.getElementById('update-script').innerHTML = ''
+            }
+        })
+    }
+    </script>
+  </div>
+  <script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function () { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://http-koldin-myddns-me-3002.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+
+    function _delete() {
+        $.ajax({
+            url: "/delete",
+            type: "POST",
+            data: {
+                'board': '<%=boardId%>'
+            },
+            success: function(result) {
+                if(result.result == 'err') return alert('this is not your post!')
+                location.href = '/'
+            }
+        })
+    }
+
+    function __update() {
+      let title = document.getElementById('title')
+      let description = document.getElementById('description').innerHTML
+      let category = document.getElementsByClassName('category')
+      let printCategory = new Array()
+      for (data of category) {
+          if(data.checked) printCategory.push(data.value)
+      }
+      $.ajax({
+          url: '/update_process',
+          type: "POST",
+          data: {
+                'category': printCategory,
+                'title': title.value,
+                'description': description,
+                'board': '<%=boardId%>'
+              },
+              success: function(result) {
+                  if(result.result == 'title') return alert('title is empty')
+                  if(result.result == 'description') return alert('description is empty')
+                  if(result.result == 'category') return alert('please select category')
+                  if(result.result == 'long') return alert('title is too long. max:30')
+                  if(result.result == 'err') return alert("it's not your post!\n don't try to edit this post!")
+                  location.href = '/ID/<%=boardId%>'
+              }
+        })
+    }
+    
+    function __upload() {
+        if(document.querySelector('#img').files[0] === undefined) return alert('image is something wrong')
+        let data = document.querySelector('#img').files[0]
+        let form = new FormData()
+        form.append('img', data)
+        document.getElementById('img_selector').innerHTML = `
+        <img src="../img/loading.gif" height="20" width="20">
+                `
+        $.ajax({
+            url: '/img_upload',
+            type: 'POST',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: form,
+            success: (result) => {
+                if(result.result == 'null') return alert('image is empty or that\'s not image')
+                if(result.result == 'nope') return alert('please send "image"')
+                
+                document.getElementById('img_selector').innerHTML = `
+                  <input type="file" accept="image/*" name="img" id="img">
+                  <input type="submit" value="send" id="send" onclick="__upload()">
+                `
+                if(result.result == 'null') { return alert('image is empty or that\'s not image') }
+
+                document.getElementById('description').innerHTML += `<img src="http://koldin.myddns.me:3002/img/${result.src}">`
+            }
+        })
+    }
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <script id="dsq-count-scr" src="//http-koldin-myddns-me-3002.disqus.com/count.js" async></script>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; koldin.myddns.me 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="../blog/vendor/jquery/jquery.min.js"></script>
+  <script src="../blog/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="../blog/js/clean-blog.min.js"></script>
+
+</body>
+
+</html>

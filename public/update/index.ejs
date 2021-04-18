@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>contact</title>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <div id="flex" style="display: block;">
+        <p><input type="text" id="title" placeholder="title"></p>
+        <p><textarea id="description" placeholder="description"></textarea></p>
+        <p>
+            <fieldset>
+                <legend>category</legend>
+                <div>
+                    <input type="checkbox" value="HTML" class="category">HTML
+                    <input type="checkbox" value="CSS" class="category">CSS
+                    <input type="checkbox" value="JavaScript" class="category">JavaScript
+                    <input type="checkbox" value="Python" class="category">Python
+                    <input type="checkbox" value="Mysql" class="category">Mysql
+                    <br />
+                    <input type="checkbox" value="Java" class="category">Java
+                    <input type="checkbox" value="Node.js" class="category">Node.js
+                    <input type="checkbox" value="Spring" class="category">Spring
+                    <input type="checkbox" value="C#" class="category">C#
+                    <input type="checkbox" value="Cpp" class="category">Cpp
+                    <br />
+                    <input type="checkbox" value="C" class="category">C
+                    <input type="checkbox" value="Jsp" class="category">Jsp
+                </div>
+            </fieldset>
+        </p>
+        <input type="submit" onclick="_click()" id="btn" value="submit">
+        <script>
+            function _click() {
+                let title = document.getElementById('title')
+                let description = document.getElementById('description')
+                let category = document.getElementsByClassName('category')
+                let printCategory = new Array()
+                for (data of category) {
+                    if(data.checked) printCategory.push(data.value)
+                }
+                $.ajax({
+                    url: "/contact_process",
+                    type: "POST",
+                    data: {
+                        'category': printCategory,
+                        'title': title.value,
+                        'description': description.value
+                    },
+                    success: function(result) {
+                        if(result.result == 'title') return alert('title is empty')
+                        if(result.result == 'description') return alert('description is empty')
+                        if(result.result == 'category') return alert('please select category')
+                        if(result.result == 'long') return alert('title is too long. max:30')
+                        location.href = '/'
+                    }
+                })
+            }
+            function _delete() {
+                $.ajax({
+                    url: "/delete",
+                    type: "POST",
+                    data: {
+                        'board': '<%=boardId%>'
+                    },
+                    success: function(result) {
+                        if(result.result == 'err') return alert('this is not your post!')
+                        location.href = '/'
+                    }
+                })
+            }
+
+            function update() {
+                $.ajax({
+                    url: "/update",
+                    type: "POST",
+                    data: {
+                        'board': '<%=boardId%>'
+                    },
+                    success: (result) => {
+                        if(result.result == 'err') return alert('this is not your post!')
+                        if(result.result == 'location') return location.href = "/login"
+                        document.getElementById('update').innerHTML = result.content
+                    }
+                })
+            }
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Clean Blog - Start Bootstrap Theme</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="검색" />
+  <meta property="og:description" content="<%=search%>" />
+  <meta property="og:image" content="http://koldin.myddns.me:3002/img/og_search.jpg" />
+  <!-- Bootstrap core CSS -->
+  <link href="<%=space%>../blog/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="<%=space%>../blog/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="<%=space%>../blog/css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="/">Start Bootstrap</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <input type="text" id="search" value="<%=search%>">
+            <input type="submit" id="btn" onclick="search()">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+          <%- nav %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('../../blog/img/home-bg.jpg')"><!--main img-->
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>search page</h1>
+            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="post-preview">
+          <h2 class="post-title">
+            <fieldset>
+              <legend>category</legend>
+              <div>
+                <h3>
+                  <input type="checkbox" value="HTML" class="category">HTML
+                  <input type="checkbox" value="CSS" class="category">CSS
+                  <input type="checkbox" value="JavaScript" class="category">JavaScript
+                  <input type="checkbox" value="Python" class="category">Python
+                  <input type="checkbox" value="Mysql" class="category">Mysql
+                  <br />
+                  <input type="checkbox" value="Java" class="category">Java
+                  <input type="checkbox" value="Node.js" class="category">Node.js
+                  <input type="checkbox" value="Spring" class="category">Spring
+                  <input type="checkbox" value="C#" class="category">C#
+                  <input type="checkbox" value="Cpp" class="category">Cpp
+                  <br />
+                  <input type="checkbox" value="C" class="category">C
+                  <input type="checkbox" value="Jsp" class="category">Jsp
+                </h3>
+                <input type="submit" value="submit" onclick="_search()">
+              </div>
+            </fieldset>
+          </h2>
+          <hr>
+          <%- content%>
+      </div>
+        <!-- Pager -->
+        <div class="clearfix">
+          <!-- <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <script>
+    function _search() {
+      let input = document.getElementById('search')
+      let category = document.getElementsByClassName('category')
+      let printCategory = new Array()
+      for (data of category) {
+          if(data.checked) printCategory.push(data.value)
+      }
+      if(printCategory.length > 0) printCategory = JSON.stringify(printCategory)
+      location.href = `/search/${input.value}/${printCategory}`
+    }
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; koldin.myddns.me 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="<%=space%>../blog/vendor/jquery/jquery.min.js"></script>
+  <script src="<%=space%>../blog/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="<%=space%>../blog/js/clean-blog.min.js"></script>
+  <script>
+    const input = document.getElementById("search")
+
+    function search() {
+      location.href = `/search/${document.getElementById('search').value}`
+    }
+
+    input.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        document.getElementById("btn").click()
+      }
+    })
+  </script>
+</body>
+
+</html>

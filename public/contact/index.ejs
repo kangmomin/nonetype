@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="contact" />
+    <meta property="og:description" content="글 등록하기" />
+    <meta property="og:image" content="http://koldin.myddns.me:3002/img/og_contact.jpg" />
+
+    <title>contact</title>
+</head>
+<body>
+    <style>
+        img{
+           max-width: 100%;
+           max-height: 100%
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <div id="flex" style="display: block;">
+        <p><input type="text" id="title" placeholder="title"></p>
+        <div contenteditable="true" id="description" style="border: 1px solid black;"></div>
+        <p id="img_selector">
+            <input type="file" accept="image/*" name="img" id="img">
+            <input type="submit" value="send" id="send" onclick="__upload()">
+        </p>
+        <p>
+            <fieldset>
+                <legend>category</legend>
+                <div>
+                    <input type="checkbox" value="HTML" class="category">HTML
+                    <input type="checkbox" value="CSS" class="category">CSS
+                    <input type="checkbox" value="JavaScript" class="category">JavaScript
+                    <input type="checkbox" value="Python" class="category">Python
+                    <input type="checkbox" value="Mysql" class="category">Mysql
+                    <br />
+                    <input type="checkbox" value="Java" class="category">Java
+                    <input type="checkbox" value="Node.js" class="category">Node.js
+                    <input type="checkbox" value="Spring" class="category">Spring
+                    <input type="checkbox" value="C#" class="category">C#
+                    <input type="checkbox" value="Cpp" class="category">Cpp
+                    <br />
+                    <input type="checkbox" value="C" class="category">C
+                    <input type="checkbox" value="Jsp" class="category">Jsp
+                </div>
+            </fieldset>
+        </p>
+        <input type="submit" onclick="_click()" id="btn" value="submit">
+        <script>
+            function _click() {
+                let title = document.getElementById('title')
+                let description = document.getElementById('description')
+                let category = document.getElementsByClassName('category')
+                let printCategory = new Array()
+                for (data of category) {
+                    if(data.checked) printCategory.push(data.value)
+                }
+                $.ajax({
+                    url: "/contact_process",
+                    type: "POST",
+                    data: {
+                        'category': printCategory,
+                        'title': title.value,
+                        'description': description.value
+                    },
+                    success: function(result) {
+                        if(result.result == 'title') return alert('title is empty')
+                        if(result.result == 'description') return alert('description is empty')
+                        if(result.result == 'category') return alert('please select category')
+                        if(result.result == 'long') return alert('title is too long. max:30')
+                        location.href = '/'
+                    }
+                })
+            }
+            function __upload() {
+                if(document.querySelector('#img').files[0] === undefined) return alert('image is something wrong')
+                let data = document.querySelector('#img').files[0]
+                let form = new FormData()
+                form.append('img', data)
+                document.getElementById('img_selector').innerHTML = `
+                <img src="../img/loading.gif" height="20" width="20">
+                `
+                $.ajax({
+                    url: '/img_upload',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    data: form,
+                    success: (result) => {
+                        document.getElementById('img_selector').innerHTML = `
+                        <input type="file" accept="image/*" name="img" id="img">
+                        <input type="submit" value="send" id="send" onclick="__upload()">
+                        `
+                        if(result.result == 'null') {
+                            return alert('image is empty or that\'s not image')
+                        }
+                        document.getElementById('description').innerHTML += `<img src="http://koldin.myddns.me:3002/img/${result.src}">`
+                    }
+                })
+            }
+        </script>
+    </div>
+</body>
+</html>
