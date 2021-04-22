@@ -8,7 +8,7 @@ app.post('/delete', (req, res) => {
         if(req.session.login !== true || board[0].owner !== req.session.userId) return res.send({result: 'err'})
         let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json', "utf8").toString())
         delete json[board[0].id]
-        mysqli.query(`delete from board where id="${post.board}"`, (err, row) => {
+        mysqli.query(`delete from board where id="${post.board}"`, () => {
             fs.writeFileSync('F:/문서/node.js/nonetype/public/json/category.json', JSON.stringify(json), "utf8")
             res.send()
         })

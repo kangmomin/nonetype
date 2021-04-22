@@ -21,6 +21,8 @@ const _delete = require('./router/_delete')
 const update = require('./router/update')
 const update_process = require('./router/update_process')
 const img_upload = require('./router/img_upload')
+const boardDB = require('./router/boardDB')
+const userDB = require('./router/userDB')
 
 app.use(express.json())
 app.post('*', bp.urlencoded({ extended: false}))
@@ -35,6 +37,7 @@ app.use(session({
     store:new FileStore()
 }))
 app.use(favicon(path.join(__dirname, 'public/img', 'favicon.ico')))
+app.use('*', boardDB, userDB)
 
 app.get('/', main)
 app.get('/ID/:id', board)

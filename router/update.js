@@ -5,6 +5,7 @@ const fs = require('fs')
 app.post('/update', (req, res) => {
     if(req.session.login !== true) return res.send({result: 'location'})
     mysqli.query(`select * from board where id = "${req.body.board}"`, (err, board) => {
+        mysqli.end()
         if(req.session.userId !== board[0].owner) return res.send({result: 'err'})
         let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json', 'utf8').toString())
         let category = ['HTML', 'CSS', 'JavaScript', 'Python', 'MySql', 'Java', 'Node.js', 'Spring', 'C#', 'Cpp', 'C', 'Jsp']

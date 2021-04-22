@@ -5,7 +5,7 @@ const fs = require('fs')
 mysqli.connect()
 
 app.post('/contact_process', (req, res) => {
-    // if(req.session.login !== true) return res.writeHead(302, {Locaion: '/login'}).end()
+    if(req.session.login !== true) return res.writeHead(302, {Locaion: '/login'}).end()
     let category = req.body['category[]']
     let title = req.body['title']
     let description = req.body['description']
@@ -23,6 +23,7 @@ app.post('/contact_process', (req, res) => {
     mysqli.query(`insert into board (title, description, owner, mainImg, thumb) VALUES (?, ?, ?, ?, ?)`, params, (err, row) => {
         if(err) throw err
         mysqli.query(`select * from board where title="${title}" and description="${description}" and owner="${userId}" and thumb="0"`, (err, row) => {
+            mysqli.end()
             json[row[0].id] = category
             fs.writeFileSync('F:/문서/node.js/nonetype/public/json/category.json', JSON.stringify(json), "utf8")
             res.send({result: "done"})
