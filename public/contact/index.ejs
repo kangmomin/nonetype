@@ -64,7 +64,7 @@
                     data: {
                         'category': printCategory,
                         'title': title.value,
-                        'description': description.value
+                        'description': description.innerHTML
                     },
                     success: function(result) {
                         if(result.result == 'title') return alert('title is empty')
@@ -97,7 +97,7 @@
                         <input type="submit" value="send" id="send" onclick="__upload()">
                         `
                         if(result.result == 'null') {
-                            return alert('image is empty or that\'s not image')
+                            return alert("image is empty or that's not image")
                         }
                         document.getElementById('description').innerHTML += `<img src="http://koldin.myddns.me:3002/img/${result.src}">`
                     }

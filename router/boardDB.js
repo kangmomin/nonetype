@@ -4,7 +4,6 @@ const mysqli = require('mysql').createConnection({ host: "127.0.0.1", user: "roo
 app.use('*', (req, res, next) => {
     mysqli.query('select * from board', (err, row) => {
         req.board = row
-        // mysqli.end()
         next()
     })
 })

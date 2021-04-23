@@ -9,6 +9,7 @@ app.post('/contact_process', (req, res) => {
     let category = req.body['category[]']
     let title = req.body['title']
     let description = req.body['description']
+    console.log(description)
     let userId = req.session.userId
     if(title.replace(/\s/g, '') == '') return res.send({result: 'title'})
     if(description.replace(/\s/g, '') == '') return res.send({result: 'description'})
