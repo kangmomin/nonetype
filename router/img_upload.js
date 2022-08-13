@@ -4,7 +4,7 @@ const path = require('path')
 const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, 'F:/문서/node.js/nonetype/public/img/');
+            cb(null, './public/img/');
         },
         filename: function (req, file, cb) {
             cb(null, new Date().valueOf() + file.originalname);

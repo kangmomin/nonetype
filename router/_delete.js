@@ -10,18 +10,18 @@ app.post('/delete', async (req, res) => {
     let post = await getPost(id)
     post = post.data
     if(req.session.login !== true || post.owner !== req.session.userId) return res.send({result: 'err'})
-    let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json', "utf8").toString())
+    let json = JSON.parse(fs.readFileSync('./public/json/category.json', "utf8").toString())
     delete json[post.id]
     mysqli.query(`delete from board where id="${post.id}"`, () => {
         mysqli.end()
-        fs.writeFileSync('F:/문서/node.js/nonetype/public/json/category.json', JSON.stringify(json), "utf8")
+        fs.writeFileSync('./public/json/category.json', JSON.stringify(json), "utf8")
         res.send()
     })
 })
 
 const getPost = async (id) => {
     try {
-        return await axios.get(`http://koldin.myddns.me:3003/board/${id}`)
+        return await axios.get(`http://localhost:3003/board/${id}`)
     } catch (error) {
         console.error(error)
     }

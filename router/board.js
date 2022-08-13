@@ -37,7 +37,7 @@ app.get('/ID/:id', async (req, res) => {
     </li>
     `
 
-    let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json', 'utf8').toString())
+    let json = JSON.parse(fs.readFileSync('./public/json/category.json', 'utf8').toString())
     res.render('blog/board.ejs', {
         title: post.title,
         nav: nav,
@@ -50,7 +50,7 @@ app.get('/ID/:id', async (req, res) => {
 
 const getPost = async (id) => {
     try {
-        return await axios.get(`http://koldin.myddns.me:3003/board/${id}`)
+        return await axios.get(`http://localhost:3003/board/${id}`)
     } catch (error) {
         console.error(error)
     }

@@ -21,7 +21,7 @@ app.get('/search/:search/:category', (req, res) => {
         </li>
         `
         for (board of boards) {
-            let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json').toString())
+            let json = JSON.parse(fs.readFileSync('./public/json/category.json').toString())
             let tags = ''
             let checker = `${category}`
             let user = ''

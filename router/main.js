@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
         `
     }
     for (data of board) {
-        let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json').toString())
+        let json = JSON.parse(fs.readFileSync('./public/json/category.json').toString())
         let tags = '', user = ''
         for(_data of row) {
             if(_data.id == data.owner) user += _data.name

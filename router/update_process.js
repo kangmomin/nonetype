@@ -16,7 +16,7 @@ app.post('/update_process', (req, res) => {
     title = title.replace("</script>", "<'/script'>")
     description = description.replace("<script", "<'script'")
     description = description.replace("</script>", "<'/script'>")
-    let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json').toString())
+    let json = JSON.parse(fs.readFileSync('./public/json/category.json').toString())
     let params = [title, description]
     mysqli.query(`update board set title = ?, description = ? where id="${req.body.board}"`, params, (err, row) => {
         if(err) throw err
@@ -24,7 +24,7 @@ app.post('/update_process', (req, res) => {
             if(err) throw err
             if(row[0].owner !== req.session.userId) return res.send({result: 'err'})
             json[row[0].id] = category
-            fs.writeFileSync('F:/문서/node.js/nonetype/public/json/category.json', JSON.stringify(json), "utf8")
+            fs.writeFileSync('./public/json/category.json', JSON.stringify(json), "utf8")
             res.send({result: "done"})
         })
     })

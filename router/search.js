@@ -17,7 +17,7 @@ app.get('/search/:search', (req, res) => {
         `
     }
     for (let board of boards) {
-        let json = JSON.parse(fs.readFileSync('F:/문서/node.js/nonetype/public/json/category.json').toString())
+        let json = JSON.parse(fs.readFileSync('./public/json/category.json').toString())
         let tags = ''
         let users = ''
         for(const _data of user) {
